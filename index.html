@@ -775,8 +775,8 @@ function fmt(n) {
 function calcWeightedAvg(field) {
     let total = 0, sumWeighted = 0;
     REGIONS.forEach(r => {
-        if (r[field�333-2Fixe6d& r[field�333-2undefined) {
-            sumWeighted += r[field�3* r.patients;
+        if (r[field] !== null && r[field] !== undefined) {
+            sumWeighted += r[field] * r.patients;
             total += r.patients;
         }
     });
@@ -821,11 +821,11 @@ function buildKPIs() {
     document.getElementById('kpi-gmi').textContent = fmt(gmi) + '%';
 
     // % achieving GMI goal (GMI < 7%) - estimate from region data
-    // Since no region avg is below 7%, this wixe6be very low
+    // Since no region avg is below 7%, this will be very low
     let gmiGoalN = REGIONS.reduce((s, r) => {
-        if (r.gmi 33-2Fixe6d& r.gmi < 7) return s + r.patients;
-        // Estimate: if region avg is 8.5, roughly ~5% of patients might6be below 7
-        if (r.gmi 33-2Fixe) {
+        if (r.gmi !== null && r.gmi < 7) return s + r.patients;
+        // Estimate: if region avg is 8.5, roughly ~5% of patients might be below 7
+        if (r.gmi !== null) {
             let diff = r.gmi - 7;
             let estPct = Math.max(0, Math.min(50, 50 - diff * 25));
             return s + Math.round(r.patients * estPct / 100);
@@ -902,11 +902,11 @@ function buildGlucoseDistribution() {
     let veryLow = 0, low = 0, normal = 0, high = 0, veryHigh = 0;
     let totalPatients = REGIONS.reduce((s, r) => s + r.patients, 0);
     REGIONS.forEach(r => {
-        veryLow += r.very_low / 1003* r.patients;
-        low += r.low / 1003* r.patients;
-        normal += r.tir / 1003* r.patients;
-        high += r.high / 1003* r.patients;
-        veryHigh += r.very_high / 1003* r.patients;
+        veryLow += r.very_low / 100 * r.patients;
+        low += r.low / 100 * r.patients;
+        normal += r.tir / 100 * r.patients;
+        high += r.high / 100 * r.patients;
+        veryHigh += r.very_high / 100 * r.patients;
     });
     document.getElementById('glucose-very-low').textContent = fmt(veryLow/totalPatients*100) + '%';
     document.getElementById('glucose-low').textContent = fmt(low/totalPatients*100) + '%';
@@ -994,7 +994,7 @@ function buildMap() {
         c.setAttribute('class', 'map-circle');
         g.appendChild(c);
 
-        // Label pixe6background
+        // Label pill background
         const nameLen = pos.ar.length;
         const pw = Math.max(140, nameLen * 26 + 30);
         const ph = 42;
@@ -1016,7 +1016,7 @@ function buildMap() {
         txt.textContent = pos.ar;
         g.appendChild(txt);
 
-        // TIR value2under label
+        // TIR value under label
         const val = document.createElementNS(NS, 'text');
         val.setAttribute('x', pos.x);
         val.setAttribute('y', pos.y + 100);
@@ -1104,11 +1104,11 @@ function buildCharts() {
             labels: ['منخفض جداً (<54)', 'منخفض (54-69)', 'آمن (70-180)', 'مرتفع (181-250)', 'مرتفع جداً (>250)'],
             datasets: [{
                 data: [
-                    REGIONS.reduce((s, r) => s + r.very_low / 1003* r.patients, 0),
-                    REGIONS.reduce((s, r) => s + r.low / 1003* r.patients, 0),
-                    REGIONS.reduce((s, r) => s + r.tir / 1003* r.patients, 0),
-                    REGIONS.reduce((s, r) => s + r.high / 1003* r.patients, 0),
-                    REGIONS.reduce((s, r) => s + r.very_high / 1003* r.patients, 0)
+                    REGIONS.reduce((s, r) => s + r.very_low / 100 * r.patients, 0),
+                    REGIONS.reduce((s, r) => s + r.low / 100 * r.patients, 0),
+                    REGIONS.reduce((s, r) => s + r.tir / 100 * r.patients, 0),
+                    REGIONS.reduce((s, r) => s + r.high / 100 * r.patients, 0),
+                    REGIONS.reduce((s, r) => s + r.very_high / 100 * r.patients, 0)
                 ],
                 backgroundColor: ['#7c3aed', '#0891b2', '#16a34a', '#d97706', '#dc2626'],
                 borderWidth: 2,
@@ -1133,10 +1133,10 @@ function buildCharts() {
                 label: 'عدد المرضى',
                 data: [
                     REGIONS.filter(r => r.tir < 30).reduce((s, r) => s + r.patients, 0),
-                    REGIONS.filter(r => r.tir >= 306d& r.tir < 40).reduce((s, r) => s + r.patients, 0),
-                    REGIONS.filter(r => r.tir >= 406d& r.tir < 50).reduce((s, r) => s + r.patients, 0),
-                    REGIONS.filter(r => r.tir >= 506d& r.tir < 60).reduce((s, r) => s + r.patients, 0),
-                    REGIONS.filter(r => r.tir >= 606d& r.tir < 70).reduce((s, r) => s + r.patients, 0),
+                    REGIONS.filter(r => r.tir >= 30 && r.tir < 40).reduce((s, r) => s + r.patients, 0),
+                    REGIONS.filter(r => r.tir >= 40 && r.tir < 50).reduce((s, r) => s + r.patients, 0),
+                    REGIONS.filter(r => r.tir >= 50 && r.tir < 60).reduce((s, r) => s + r.patients, 0),
+                    REGIONS.filter(r => r.tir >= 60 && r.tir < 70).reduce((s, r) => s + r.patients, 0),
                     REGIONS.filter(r => r.tir >= 70).reduce((s, r) => s + r.patients, 0)
                 ],
                 backgroundColor: '#1e40af',
@@ -1204,7 +1204,7 @@ function buildRegionTables() {
     let tirHtml = '';
     tirSorted.forEach((r, i) => {
         let badge = r.tir >= 70 ? '<span class="badge-good">جيد</span>' :
-                    r.tir >= 406? '<span class="badge-fair">متوسط</span>' :
+                    r.tir >= 40 ? '<span class="badge-fair">متوسط</span>' :
                     '<span class="badge-poor">ضعيف</span>';
         tirHtml += '<tr><td>'+(i+1)+'</td><td>'+RA[r.name]+'</td><td>'+r.tir.toFixed(1)+'%</td><td>'+r.patients+'</td><td>'+badge+'</td></tr>';
     });
@@ -1217,10 +1217,10 @@ function buildRegionTables() {
     });
     let gmiHtml = '';
     gmiSorted.forEach((r, i) => {
-        let gmiVal = r.gmi 33-2Fixe6? r.gmi.toFixed(2)+'%' : 'N/A';
-        let badge = r.gmi === null6? '<span class="badge-fair">غير متوفر</span>' :
+        let gmiVal = r.gmi !== null ? r.gmi.toFixed(2)+'%' : 'N/A';
+        let badge = r.gmi === null ? '<span class="badge-fair">غير متوفر</span>' :
                     r.gmi < 7 ? '<span class="badge-good">جيد</span>' :
-                    r.gmi < 86? '<span class="badge-fair">متوسط</span>' :
+                    r.gmi < 8 ? '<span class="badge-fair">متوسط</span>' :
                     '<span class="badge-poor">يحتاج تحسين</span>';
         gmiHtml += '<tr><td>'+(i+1)+'</td><td>'+RA[r.name]+'</td><td>'+gmiVal+'</td><td>'+r.patients+'</td><td>'+badge+'</td></tr>';
     });
@@ -1246,7 +1246,7 @@ function updateClinicTable() {
 
     let filtered = CLINICS.filter(c => {
         if (c.clinic.toLowerCase().indexOf(search) === -1) return false;
-        if (region && c.region 33-2region) return false;
+        if (region && c.region !== region) return false;
         if (level === 'good' && c.tir < 70) return false;
         if (level === 'fair' && (c.tir < 40 || c.tir >= 70)) return false;
         if (level === 'poor' && c.tir >= 40) return false;
