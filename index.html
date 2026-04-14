@@ -800,97 +800,51 @@ function buildKPIs() {
     // General
     document.getElementById('kpi-total').textContent = '29,567';
     
-    // Average age estimate from pediatric/adult ratio
+    // Average age from patient data
     let totalPediatric = REGIONS.reduce((s, r) => s + r.pediatric, 0);
     let totalAdult = REGIONS.reduce((s, r) => s + r.adult, 0);
-    let estAge = ((totalAdult * 45) + (totalPediatric * 12)) / (totalAdult + totalPediatric);
-    document.getElementById('kpi-avg-age').textContent = fmt(estAge);
+    document.getElementById('kpi-avg-age').textContent = '28.0';
 
-    // % sharing data = active patients / total registered
-    let sharingPct = (totalPatients / totalRegistered) * 100;
+    // % sharing data = active CGM patients / total patients
+    let sharingPct = (8989 / 29567) * 100;
     document.getElementById('kpi-sharing').textContent = fmt(sharingPct) + '%';
 
     // Glycaemic Control
     document.getElementById('kpi-tir').textContent = fmt(tir) + '%';
     
-    // % achieving TIR goal (TIR > 70%)
-    let tirGoalN = REGIONS.reduce((s, r) => s + r.tir70_n, 0);
-    let tirGoalPct = (tirGoalN / totalPatients) * 100;
-    document.getElementById('kpi-tir-goal').textContent = fmt(tirGoalPct) + '%';
+    // % achieving TIR goal (TIR >= 70%) — from patient data: 969/8989
+    document.getElementById('kpi-tir-goal').textContent = '10.8%';
 
     document.getElementById('kpi-gmi').textContent = fmt(gmi) + '%';
 
-    // % achieving GMI goal (GMI < 7%) - estimate from region data
-    // Since no region avg is below 7%, this will be very low
-    let gmiGoalN = REGIONS.reduce((s, r) => {
-        if (r.gmi !== null && r.gmi < 7) return s + r.patients;
-        // Estimate: if region avg is 8.5, roughly ~5% of patients might be below 7
-        if (r.gmi !== null) {
-            let diff = r.gmi - 7;
-            let estPct = Math.max(0, Math.min(50, 50 - diff * 25));
-            return s + Math.round(r.patients * estPct / 100);
-        }
-        return s;
-    }, 0);
-    let gmiGoalPct = (gmiGoalN / totalPatients) * 100;
-    document.getElementById('kpi-gmi-goal').textContent = fmt(gmiGoalPct) + '%';
+    // % achieving GMI goal (GMI < 7%) — from file 4: 1180/8446 = 14.0%
+    document.getElementById('kpi-gmi-goal').textContent = '14.0%';
 
     document.getElementById('kpi-glucose').textContent = fmt(glucose);
 
-    // % achieving glucose goal (< 154 mg/dl) - estimate
-    let glucGoalN = REGIONS.reduce((s, r) => {
-        if (r.glucose === null) return s;
-        let diff = r.glucose - 154;
-        let estPct = Math.max(0, Math.min(50, 50 - diff * 0.5));
-        return s + Math.round(r.patients * estPct / 100);
-    }, 0);
-    let glucGoalPct = (glucGoalN / totalPatients) * 100;
-    document.getElementById('kpi-glucose-goal').textContent = fmt(glucGoalPct) + '%';
+    // % achieving glucose goal (< 154 mg/dl) — from patient data: 1425/8989
+    document.getElementById('kpi-glucose-goal').textContent = '15.9%';
 
     // Safety
     document.getElementById('kpi-tbr-low').textContent = fmt(low) + '%';
-    // % not within TBR goal low (low > 4%)
-    let tbrLowFailN = REGIONS.reduce((s, r) => {
-        // Estimate patients with low > 4% based on region average
-        if (r.low > 4) return s + r.patients;
-        let ratio = r.low / 4;
-        return s + Math.round(r.patients * ratio * 0.3);
-    }, 0);
-    document.getElementById('kpi-tbr-low-fail').textContent = fmt((tbrLowFailN / totalPatients) * 100) + '%';
+    // % not within TBR goal low (low > 4%) — from patient data: 1344/8989
+    document.getElementById('kpi-tbr-low-fail').textContent = '15.0%';
 
     document.getElementById('kpi-tbr-vlow').textContent = fmt(veryLow) + '%';
-    // % not within TBR very low goal (very_low > 1%)
-    let tbrVlowFailN = REGIONS.reduce((s, r) => {
-        if (r.very_low > 1) return s + Math.round(r.patients * 0.6);
-        return s + Math.round(r.patients * r.very_low * 0.3);
-    }, 0);
-    document.getElementById('kpi-tbr-vlow-fail').textContent = fmt((tbrVlowFailN / totalPatients) * 100) + '%';
+    // % not within TBR very low goal (very_low > 1%) — from patient data: 2123/8989
+    document.getElementById('kpi-tbr-vlow-fail').textContent = '23.6%';
 
     document.getElementById('kpi-tar-high').textContent = fmt(high) + '%';
-    // % not within TAR high goal (high > 25%)
-    let tarHighFailN = REGIONS.reduce((s, r) => {
-        // All regions have high around 22-25%, so a good portion near threshold
-        if (r.high > 25) return s + r.patients;
-        let ratio = r.high / 25;
-        return s + Math.round(r.patients * ratio * 0.45);
-    }, 0);
-    document.getElementById('kpi-tar-high-fail').textContent = fmt((tarHighFailN / totalPatients) * 100) + '%';
+    // % not within TAR high goal (high > 25%) — from patient data: 3723/8989
+    document.getElementById('kpi-tar-high-fail').textContent = '41.4%';
 
     document.getElementById('kpi-tar-vhigh').textContent = fmt(veryHigh) + '%';
-    // % not within TAR very high goal (very_high > 5%)
-    let tarVhighFailN = REGIONS.reduce((s, r) => {
-        if (r.very_high > 5) return s + r.patients;
-        return s + Math.round(r.patients * r.very_high / 5 * 0.4);
-    }, 0);
-    document.getElementById('kpi-tar-vhigh-fail').textContent = fmt((tarVhighFailN / totalPatients) * 100) + '%';
+    // % not within TAR very high goal (very_high > 5%) — from patient data: 7894/8989
+    document.getElementById('kpi-tar-vhigh-fail').textContent = '87.8%';
 
     document.getElementById('kpi-cv').textContent = fmt(cv) + '%';
-    // % not within CV goal (cv > 36%)
-    let cvFailN = REGIONS.reduce((s, r) => {
-        if (r.cv > 36) return s + Math.round(r.patients * 0.55);
-        return s + Math.round(r.patients * r.cv / 36 * 0.35);
-    }, 0);
-    document.getElementById('kpi-cv-fail').textContent = fmt((cvFailN / totalPatients) * 100) + '%';
+    // % not within CV goal (cv > 36%) — from patient data: 4867/8989
+    document.getElementById('kpi-cv-fail').textContent = '54.1%';
 
     // Compliance
     document.getElementById('kpi-sensor').textContent = fmt(sensor) + '%';
