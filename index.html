@@ -377,14 +377,41 @@
         footer {
             background: linear-gradient(135deg, var(--moh-green-dark) 0%, var(--moh-green) 100%);
             color: white;
-            padding: 20px;
+            padding: 24px 30px;
             border-radius: 12px;
-            text-align: center;
             font-size: 12px;
             margin-top: 24px;
         }
+        footer .footer-top { text-align: center; margin-bottom: 16px; }
         footer .footer-line { opacity: 0.8; margin-bottom: 4px; }
         footer .footer-brand { font-weight: 600; font-size: 13px; opacity: 1; }
+        footer .footer-partners {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 48px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        footer .partner-block {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        footer .partner-label {
+            font-size: 11px;
+            opacity: 0.7;
+            font-weight: 400;
+        }
+        footer .partner-logo-ithnain {
+            height: 36px;
+            width: auto;
+        }
+        footer .partner-logo-dexcom {
+            height: 28px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
 
         .hidden { display: none; }
         .map-water { fill: #D4E8F5; }
@@ -699,8 +726,20 @@
         </div>
 
         <footer>
-            <div class="footer-brand">وزارة الصحة | المملكة العربية السعودية</div>
-            <div class="footer-line">لوحة مؤشرات الأداء - برنامج المراقبة المستمرة للسكر (CGM) | آخر تحديث: أبريل ٢٠٢٦</div>
+            <div class="footer-top">
+                <div class="footer-brand">وزارة الصحة | المملكة العربية السعودية</div>
+                <div class="footer-line">لوحة مؤشرات الأداء - برنامج المراقبة المستمرة للسكر (CGM) | آخر تحديث: أبريل ٢٠٢٦</div>
+            </div>
+            <div class="footer-partners">
+                <div class="partner-block">
+                    <span class="partner-label">Developed by</span>
+                    <img class="partner-logo-ithnain" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgNTAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNTAiPgogIDxzdHlsZT4KICAgIEBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PUlCTStQbGV4K1NhbnMrQXJhYmljOndnaHRANzAwJmFtcDtkaXNwbGF5PXN3YXAnKTsKICAgIHRleHQgeyBmb250LWZhbWlseTogJ0lCTSBQbGV4IFNhbnMgQXJhYmljJywgc2Fucy1zZXJpZjsgfQogIDwvc3R5bGU+CiAgPHRleHQgeD0iNjAiIHk9IjM1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIyOCIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1mYW1pbHk9IidJQk0gUGxleCBTYW5zIEFyYWJpYycsIHNhbnMtc2VyaWYiPtil2KvZhtmK2YY8L3RleHQ+CiAgPGNpcmNsZSBjeD0iNTgiIGN5PSIxMCIgcj0iMyIgZmlsbD0iI0U4MzQ2QSIvPgo8L3N2Zz4=" alt="إثنين">
+                </div>
+                <div class="partner-block">
+                    <span class="partner-label">Powered by</span>
+                    <img class="partner-logo-dexcom" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNTAgNDAiIHdpZHRoPSIxNTAiIGhlaWdodD0iNDAiPgogIDx0ZXh0IHg9Ijc1IiB5PSIzMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzRDQUY1MCIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWYiIGxldHRlci1zcGFjaW5nPSItMSI+ZGV4Y29tPC90ZXh0Pgo8L3N2Zz4=" alt="Dexcom">
+                </div>
+            </div>
         </footer>
     </div>
 
